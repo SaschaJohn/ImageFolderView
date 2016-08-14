@@ -39,7 +39,6 @@ namespace ShanuImageFolderView
             int locnewY = locY;
             foreach (FileInfo img in Images)
             {
-
                 if (img.Extension.ToLower() == ".png" || img.Extension.ToLower() == ".jpg" || img.Extension.ToLower() == ".gif" || img.Extension.ToLower() == ".jpeg" || img.Extension.ToLower() == ".bmp" || img.Extension.ToLower() == ".tif")
                 {
 
@@ -51,15 +50,12 @@ namespace ShanuImageFolderView
                     }
                     else
                     {
-
                         locnewY = locY;
                     }
 
                     loadImagestoPanel(img.Name, img.FullName, locnewX, locnewY);
                     locnewY = locY + sizeHeight + 10;
                     locnewX = locnewX + sizeWidth + 10;
-
-
                 }
             }
         }
@@ -82,22 +78,12 @@ namespace ShanuImageFolderView
                 ctrl.Padding = new System.Windows.Forms.Padding(3);
             }
 
-            ctrl.Click += new EventHandler(control_Click);
+            ctrl.Click += new EventHandler(image_Click);
             pnControls.Controls.Add(ctrl);
             previews.Add(ctrl);
-
-
-
         }
 
-        
-        
-
-        
-        
-
-
-        private void control_Click(object sender, EventArgs e)
+        private void image_Click(object sender, EventArgs e)
         {
             foreach (var q in previews)
             {
@@ -106,9 +92,6 @@ namespace ShanuImageFolderView
                 q.Padding = new System.Windows.Forms.Padding(0);
                 q.Refresh();
             }
-
-
-
             PictureBox p = (PictureBox)sender;
 
             p.BackColor = System.Drawing.SystemColors.ActiveCaption;
@@ -117,7 +100,6 @@ namespace ShanuImageFolderView
             Properties.Settings.Default["SelectedImage"] = p.ImageLocation;
             Properties.Settings.Default.Save(); // Saves settings in application configuration file
             return;
-        }
-      
-            }
+        }      
+    }
 }
