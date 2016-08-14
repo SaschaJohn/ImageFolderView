@@ -13,18 +13,18 @@ namespace ShanuImageFolderView
 
     public partial class Form1 : Form
     {
-            private System.Windows.Forms.FolderBrowserDialog folderBrowserDlg;
-            int locX = 20;
-            int locY = 10;
-            int sizeWidth = 80;
-            int sizeHeight = 80;
+        private System.Windows.Forms.FolderBrowserDialog folderBrowserDlg;
+        int locX = 20;
+        int locY = 10;
+        int sizeWidth = 80;
+        int sizeHeight = 80;
         List<PictureBox> previews = new List<PictureBox>();
         public Form1()
         {
             InitializeComponent();
         }
 
-  
+
         private void openFolderToolStripMenuItem_Click(object sender, EventArgs e)
         {
             DirectoryInfo Folder;
@@ -59,28 +59,36 @@ namespace ShanuImageFolderView
                             locnewY = locY;
                         }
 
-                        loadImagestoPanel(img.Name, img.FullName, locnewX,locnewY);
+                        loadImagestoPanel(img.Name, img.FullName, locnewX, locnewY);
                         locnewY = locY + sizeHeight + 10;
                         locnewX = locnewX + sizeWidth + 10;
 
-                        
+
                     }
                 }
             }
-           
+
         }
 
-        private void loadImagestoPanel(String imageName,String ImageFullName,int newLocX,int newLocY)
-        {      
-                PictureBox ctrl = new PictureBox();
-                ctrl.Image = Image.FromFile(ImageFullName);
-                ctrl.BackColor = Color.Black;
-              
-                ctrl.Location = new Point(newLocX, newLocY);
-                ctrl.Size = new System.Drawing.Size(sizeWidth, sizeHeight);
-                ctrl.SizeMode = PictureBoxSizeMode.StretchImage;
-                ctrl.Click += new EventHandler(control_Click);
-                pnControls.Controls.Add(ctrl);
+        private void loadImagestoPanel(String imageName, String ImageFullName, int newLocX, int newLocY)
+        {
+            string previousSelectedImage = (string)Properties.Settings.Default["SelectedImage"];
+            PictureBox ctrl = new PictureBox();
+            ctrl.Image = Image.FromFile(ImageFullName);
+            ctrl.BackColor = Color.Black;
+
+            ctrl.Location = new Point(newLocX, newLocY);
+            ctrl.Size = new System.Drawing.Size(sizeWidth, sizeHeight);
+            ctrl.SizeMode = PictureBoxSizeMode.StretchImage;
+            ctrl.ImageLocation = ImageFullName;
+            if (ImageFullName == previousSelectedImage)
+            {
+                ctrl.BackColor = System.Drawing.SystemColors.ActiveCaption;
+                ctrl.Padding = new System.Windows.Forms.Padding(3);
+            }
+
+            ctrl.Click += new EventHandler(control_Click);
+            pnControls.Controls.Add(ctrl);
             previews.Add(ctrl);
 
 
@@ -130,16 +138,16 @@ namespace ShanuImageFolderView
         }
 
         private void toolStripButton4_Click(object sender, EventArgs e)
-        {           
+        {
             locX = 20;
             locY = 10;
             sizeWidth = 80;
             sizeHeight = 80;
             if (pnControls.Controls.Count > 0)
             {
-                loadControls();                
+                loadControls();
             }
-         
+
         }
 
         private void loadControls()
@@ -173,7 +181,7 @@ namespace ShanuImageFolderView
             int SaveVal = 0;
             locX = 20;
             locY = 10;
-            sizeWidth =50;
+            sizeWidth = 50;
             sizeHeight = 50;
             foreach (Control p in pnControls.Controls)
             {
@@ -222,31 +230,34 @@ namespace ShanuImageFolderView
 
         private void control_Click(object sender, EventArgs e)
         {
-            foreach(var q in previews){
+            foreach (var q in previews)
+            {
 
                 q.BackColor = System.Drawing.SystemColors.ActiveCaption;
                 q.Padding = new System.Windows.Forms.Padding(0);
                 q.Refresh();
             }
 
-           
+
 
             PictureBox p = (PictureBox)sender;
 
             p.BackColor = System.Drawing.SystemColors.ActiveCaption;
             p.Padding = new System.Windows.Forms.Padding(3);
             p.Refresh();
+            Properties.Settings.Default["SelectedImage"] = p.ImageLocation;
+            Properties.Settings.Default.Save(); // Saves settings in application configuration file
             return;
         }
 
         private void control_MouseMove(object sender, MouseEventArgs e)
         {
 
-            
 
-        Control control = (Control)sender;
-                PictureBox pic = (PictureBox)control;
-                pictureBox1.Image = pic.Image;
+
+            Control control = (Control)sender;
+            PictureBox pic = (PictureBox)control;
+            pictureBox1.Image = pic.Image;
 
             if (pictureBox1.Tag == null)
             {
@@ -276,7 +287,7 @@ namespace ShanuImageFolderView
             if (dlg.ShowDialog() == DialogResult.OK)
             {
                 pictureBox1.Image.Save(dlg.FileName);
-            }           
+            }
         }
 
         private void toolStripButton5_Click(object sender, EventArgs e)
