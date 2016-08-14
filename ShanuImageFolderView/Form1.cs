@@ -79,7 +79,6 @@ namespace ShanuImageFolderView
                 ctrl.Location = new Point(newLocX, newLocY);
                 ctrl.Size = new System.Drawing.Size(sizeWidth, sizeHeight);
                 ctrl.SizeMode = PictureBoxSizeMode.StretchImage;
-                ctrl.MouseMove += new MouseEventHandler(control_MouseMove);
                 ctrl.Click += new EventHandler(control_Click);
                 pnControls.Controls.Add(ctrl);
             previews.Add(ctrl);
